@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head><!-- <script src="https://static.readdy.ai/static/e.js"></script> -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGON - Almacén del Este | Licores Premium en República Dominicana</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before {
+content: "\f3c2";
+}
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#1B6EC2',
+secondary: '#FF8C00'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Age Verification Modal -->
+<div id="ageModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+<div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+<div class="mb-6">
+<div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+<img src="https://static.readdy.ai/image/ade69868ebee676ae37e60fd77ad09f6/ba77777004e75cfba38b471c023ed1e4.png" alt="DAGON Logo" class="w-full h-full object-contain">
+</div>
+<h2 class="text-2xl font-bold text-gray-800 mb-2">DAGON</h2>
+<p class="text-sm text-gray-600">Almacén del Este</p>
+</div>
+<h3 class="text-xl font-bold text-gray-800 mb-4">¿Eres mayor de 18 años?</h3>
+<p class="text-sm text-gray-600 mb-6">Debes ser mayor de edad para acceder a este sitio web. El consumo de alcohol puede ser perjudicial para la salud.</p>
+<div class="flex gap-4">
+<button id="ageYes" class="flex-1 bg-primary text-white py-3 px-6 !rounded-button font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap">
+SÍ, SOY MAYOR
+</button>
+<button id="ageNo" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 !rounded-button font-semibold hover:bg-gray-400 transition-colors whitespace-nowrap">
+NO
+</button>
+</div>
+<p class="text-xs text-gray-500 mt-4">Bebe con moderación. Prohibida la venta a menores de edad.</p>
+</div>
+</div>
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-40">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between py-4">
+<!-- Logo -->
+<div class="flex items-center">
+<div>
+<img style="width: 250px; height: 75px;" src="https://static.readdy.ai/image/ade69868ebee676ae37e60fd77ad09f6/ba77777004e75cfba38b471c023ed1e4.png" alt="DAGON">
+</div>
+<!-- <div>
+<h1 class="text-xl font-bold text-primary">DAGON</h1>
+<p class="text-xs text-gray-600">Almacén del Este</p>
+</div> -->
+</div>
+<!-- Search Bar -->
+<div class="flex-1 max-w-md mx-8">
+<div class="relative">
+<input type="text" placeholder="Buscar licores, cervezas, vinos..." class="w-full py-3 pl-12 pr-4 border border-gray-200 !rounded-button focus:outline-none focus:border-primary text-sm">
+<div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+<i class="ri-search-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<!-- Right Icons -->
+<div class="flex items-center space-x-6">
+<!-- Language Selector -->
+<div class="relative">
+<button id="langButton" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-global-line"></i>
+</div>
+<span class="text-sm font-medium">ES</span>
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</button>
+</div>
+<!-- User Account -->
+<button class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-user-line"></i>
+</div>
+<span class="text-sm font-medium hidden md:block">Mi Cuenta</span>
+</button>
+<!-- Cart -->
+<button id="cartButton" class="relative flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-shopping-cart-line"></i>
+</div>
+<span class="text-sm font-medium hidden md:block">Carrito</span>
+<span id="cartBadge" class="absolute -top-2 -right-2 bg-secondary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Navigation Menu -->
+<nav class="border-t border-gray-100">
+<div class="container mx-auto px-4">
+<div class="flex space-x-8 overflow-x-auto">
+<a href="#" class="py-4 text-sm font-medium text-gray-700 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors whitespace-nowrap">Ron</a>
+<a href="#" class="py-4 text-sm font-medium text-gray-700 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors whitespace-nowrap">Cerveza</a>
+<a href="#" class="py-4 text-sm font-medium text-gray-700 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors whitespace-nowrap">Whisky</a>
+<a href="#" class="py-4 text-sm font-medium text-gray-700 hover:text-primary border-b-2 border-transparent hover:border-primary transition-colors whitespace-nowrap">Vinos</a>
+<a href="#" class="py-4 text-sm font-medium text-secondary hover:text-orange-600 border-b-2 border-transparent hover:border-secondary transition-colors whitespace-nowrap">Ofertas Especiales</a>
+</div>
+</div>
+</nav>
+</header>
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-primary to-blue-600 text-white overflow-hidden">
+<div class="absolute inset-0" style="background-image: url('https://readdy.ai/api/search-image?query=Dominican%20Republic%20liquor%20store%20interior%20modern%20shelves%20with%20premium%20bottles%20rum%20whisky%20wine%20caribbean%20atmosphere%20professional%20lighting%20clean%20background&width=1920&height=600&seq=3&orientation=landscape'); background-size: cover; background-position: center; opacity: 0.3;"></div>
+<div class="relative container mx-auto px-4 py-20">
+<div class="max-w-2xl">
+<h2 class="text-5xl font-bold mb-6">Los Mejores Licores de República Dominicana</h2>
+<p class="text-xl mb-8 text-blue-100">Descubre nuestra selección premium de rones, whiskys, vinos y cervezas. Entrega rápida en toda la zona este.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-secondary hover:bg-orange-600 text-white px-8 py-4 !rounded-button font-semibold transition-colors whitespace-nowrap">
+Ver Catálogo
+</button>
+<button class="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 !rounded-button font-semibold transition-colors whitespace-nowrap">
+Ofertas del Día
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Smart Sales Section -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<div class="flex items-center justify-center mb-4">
+<div class="w-8 h-8 flex items-center justify-center mr-3">
+<i class="ri-brain-line text-secondary text-2xl"></i>
+</div>
+<h3 class="text-3xl font-bold text-gray-800">Venta Inteligente</h3>
+</div>
+<p class="text-gray-600 max-w-2xl mx-auto">Nuestro sistema de IA analiza tendencias locales, clima y preferencias para recomendarte los mejores productos</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- AI Recommendation Card 1 -->
+<div class="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-6 hover:shadow-lg transition-shadow">
+<div class="flex items-center mb-4">
+<span class="bg-primary text-white text-xs px-2 py-1 rounded-full">IA Recomienda</span>
+<div class="w-4 h-4 flex items-center justify-center ml-2">
+<i class="ri-fire-line text-secondary"></i>
+</div>
+</div>
+<img src="https://readdy.ai/api/search-image?query=Premium%20Dominican%20rum%20bottle%20Brugal%20or%20Barcelo%20on%20clean%20white%20background%20product%20photography%20professional%20lighting&width=200&height=250&seq=4&orientation=portrait" alt="Ron Premium" class="w-full h-48 object-contain mb-4">
+<h4 class="font-semibold text-gray-800 mb-2">Ron Brugal XV</h4>
+<p class="text-sm text-gray-600 mb-3">Popular esta semana</p>
+<p class="text-lg font-bold text-primary mb-4">RD$ 2,850</p>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- AI Recommendation Card 2 -->
+<div class="bg-gradient-to-br from-orange-50 to-white border border-orange-100 rounded-xl p-6 hover:shadow-lg transition-shadow">
+<div class="flex items-center mb-4">
+<span class="bg-secondary text-white text-xs px-2 py-1 rounded-full">Ideal para el clima</span>
+<div class="w-4 h-4 flex items-center justify-center ml-2">
+<i class="ri-sun-line text-secondary"></i>
+</div>
+</div>
+<img src="https://readdy.ai/api/search-image?query=Cold%20beer%20bottles%20Presidente%20or%20Bohemia%20Dominican%20beer%20on%20clean%20white%20background%20product%20photography%20professional%20lighting&width=200&height=250&seq=5&orientation=portrait" alt="Cerveza Presidente" class="w-full h-48 object-contain mb-4">
+<h4 class="font-semibold text-gray-800 mb-2">Cerveza Presidente</h4>
+<p class="text-sm text-gray-600 mb-3">Perfecta para hoy 32°C</p>
+<p class="text-lg font-bold text-primary mb-4">RD$ 95</p>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- AI Recommendation Card 3 -->
+<div class="bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-xl p-6 hover:shadow-lg transition-shadow">
+<div class="flex items-center mb-4">
+<span class="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">Alta demanda</span>
+<div class="w-4 h-4 flex items-center justify-center ml-2">
+<i class="ri-trending-up-line text-secondary"></i>
+</div>
+</div>
+<img src="https://readdy.ai/api/search-image?query=Premium%20whisky%20bottle%20Johnnie%20Walker%20or%20Chivas%20Regal%20on%20clean%20white%20background%20product%20photography%20professional%20lighting&width=200&height=250&seq=6&orientation=portrait" alt="Whisky Premium" class="w-full h-48 object-contain mb-4">
+<h4 class="font-semibold text-gray-800 mb-2">Johnnie Walker Black</h4>
+<p class="text-sm text-gray-600 mb-3">Más vendido del mes</p>
+<p class="text-lg font-bold text-primary mb-4">RD$ 4,200</p>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- AI Recommendation Card 4 -->
+<div class="bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-xl p-6 hover:shadow-lg transition-shadow">
+<div class="flex items-center mb-4">
+<span class="bg-green-600 text-white text-xs px-2 py-1 rounded-full">Oferta especial</span>
+<div class="w-4 h-4 flex items-center justify-center ml-2">
+<i class="ri-price-tag-3-line text-secondary"></i>
+</div>
+</div>
+<img src="https://readdy.ai/api/search-image?query=Red%20wine%20bottle%20Spanish%20or%20Chilean%20wine%20on%20clean%20white%20background%20product%20photography%20professional%20lighting&width=200&height=250&seq=7&orientation=portrait" alt="Vino Tinto" class="w-full h-48 object-contain mb-4">
+<h4 class="font-semibold text-gray-800 mb-2">Vino Marqués de Cáceres</h4>
+<p class="text-sm text-gray-600 mb-3">30% de descuento</p>
+<div class="flex items-center mb-4">
+<p class="text-lg font-bold text-primary">RD$ 1,400</p>
+<p class="text-sm text-gray-400 line-through ml-2">RD$ 2,000</p>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Categories -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<h3 class="text-3xl font-bold text-center text-gray-800 mb-12">Explora Nuestras Categorías</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Ron Category -->
+<div class="group cursor-pointer">
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Dominican%20rum%20collection%20multiple%20bottles%20Brugal%20Barcelo%20Mamajuana%20on%20wooden%20shelf%20Caribbean%20atmosphere%20warm%20lighting&width=300&height=200&seq=8&orientation=landscape" alt="Ron Dominicano" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+</div>
+<div class="p-6">
+<h4 class="text-xl font-semibold text-gray-800 mb-2">Ron Dominicano</h4>
+<p class="text-gray-600 text-sm mb-4">Los mejores rones del Caribe</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-medium">45+ productos</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-arrow-right-line text-primary"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Cerveza Category -->
+<div class="group cursor-pointer">
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Dominican%20beer%20collection%20Presidente%20Bohemia%20Brahma%20bottles%20in%20ice%20bucket%20tropical%20setting%20refreshing%20cold%20beverages&width=300&height=200&seq=9&orientation=landscape" alt="Cervezas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+</div>
+<div class="p-6">
+<h4 class="text-xl font-semibold text-gray-800 mb-2">Cervezas</h4>
+<p class="text-gray-600 text-sm mb-4">Nacionales e importadas</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-medium">32+ productos</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-arrow-right-line text-primary"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Whisky Category -->
+<div class="group cursor-pointer">
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Premium%20whisky%20collection%20Johnnie%20Walker%20Chivas%20Regal%20Macallan%20bottles%20elegant%20display%20luxury%20bar%20setting&width=300&height=200&seq=10&orientation=landscape" alt="Whiskys Premium" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+</div>
+<div class="p-6">
+<h4 class="text-xl font-semibold text-gray-800 mb-2">Whiskys Premium</h4>
+<p class="text-gray-600 text-sm mb-4">Escoceses, irlandeses y más</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-medium">28+ productos</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-arrow-right-line text-primary"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Vinos Category -->
+<div class="group cursor-pointer">
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Wine%20collection%20red%20white%20ros%C3%A9%20bottles%20Spanish%20Chilean%20French%20wines%20elegant%20cellar%20display%20sophisticated%20atmosphere&width=300&height=200&seq=11&orientation=landscape" alt="Vinos Selectos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+</div>
+<div class="p-6">
+<h4 class="text-xl font-semibold text-gray-800 mb-2">Vinos Selectos</h4>
+<p class="text-gray-600 text-sm mb-4">Tintos, blancos y rosados</p>
+<div class="flex items-center justify-between">
+<span class="text-primary font-medium">38+ productos</span>
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-arrow-right-line text-primary"></i>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Products -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="flex items-center justify-between mb-12">
+<h3 class="text-3xl font-bold text-gray-800">Productos Destacados</h3>
+<button class="text-primary hover:text-blue-700 font-medium flex items-center space-x-2">
+<span>Ver todos</span>
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-arrow-right-line"></i>
+</div>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Product 1 -->
+<div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-shadow">
+<div class="relative mb-4">
+<img src="https://readdy.ai/api/search-image?query=Ron%20Barcel%C3%B3%20Imperial%20premium%20Dominican%20rum%20bottle%20elegant%20design%20clean%20white%20background%20product%20photography&width=200&height=250&seq=12&orientation=portrait" alt="Ron Barceló Imperial" class="w-full h-48 object-contain">
+<span class="absolute top-2 left-2 bg-secondary text-white text-xs px-2 py-1 rounded-full">Nuevo</span>
+</div>
+<h4 class="font-semibold text-gray-800 mb-2">Ron Barceló Imperial</h4>
+<p class="text-sm text-gray-600 mb-3">Ron añejo premium dominicano</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-lg font-bold text-primary">RD$ 3,200</p>
+<div class="flex items-center text-yellow-400">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-star-fill"></i>
+</div>
+<span class="text-sm text-gray-600 ml-1">4.8</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- Product 2 -->
+<div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-shadow">
+<div class="relative mb-4">
+<img src="https://readdy.ai/api/search-image?query=Bohemia%20beer%20bottle%20Dominican%20premium%20lager%20clean%20white%20background%20product%20photography%20professional%20lighting&width=200&height=250&seq=13&orientation=portrait" alt="Cerveza Bohemia" class="w-full h-48 object-contain">
+<span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">Oferta</span>
+</div>
+<h4 class="font-semibold text-gray-800 mb-2">Cerveza Bohemia</h4>
+<p class="text-sm text-gray-600 mb-3">Cerveza premium dominicana</p>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center">
+<p class="text-lg font-bold text-primary">RD$ 85</p>
+<p class="text-sm text-gray-400 line-through ml-2">RD$ 110</p>
+</div>
+<div class="flex items-center text-yellow-400">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-star-fill"></i>
+</div>
+<span class="text-sm text-gray-600 ml-1">4.6</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- Product 3 -->
+<div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-shadow">
+<div class="relative mb-4">
+<img src="https://readdy.ai/api/search-image?query=Chivas%20Regal%2012%20years%20whisky%20bottle%20premium%20Scottish%20blend%20clean%20white%20background%20product%20photography&width=200&height=250&seq=14&orientation=portrait" alt="Chivas Regal 12" class="w-full h-48 object-contain">
+</div>
+<h4 class="font-semibold text-gray-800 mb-2">Chivas Regal 12</h4>
+<p class="text-sm text-gray-600 mb-3">Whisky escocés premium</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-lg font-bold text-primary">RD$ 3,800</p>
+<div class="flex items-center text-yellow-400">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-star-fill"></i>
+</div>
+<span class="text-sm text-gray-600 ml-1">4.9</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+<!-- Product 4 -->
+<div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-shadow">
+<div class="relative mb-4">
+<img src="https://readdy.ai/api/search-image?query=Marqu%C3%A9s%20de%20Riscal%20red%20wine%20bottle%20Spanish%20Rioja%20premium%20wine%20clean%20white%20background%20product%20photography&width=200&height=250&seq=15&orientation=portrait" alt="Marqués de Riscal" class="w-full h-48 object-contain">
+<span class="absolute top-2 left-2 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Premium</span>
+</div>
+<h4 class="font-semibold text-gray-800 mb-2">Marqués de Riscal</h4>
+<p class="text-sm text-gray-600 mb-3">Vino tinto español reserva</p>
+<div class="flex items-center justify-between mb-4">
+<p class="text-lg font-bold text-primary">RD$ 1,650</p>
+<div class="flex items-center text-yellow-400">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-star-fill"></i>
+</div>
+<span class="text-sm text-gray-600 ml-1">4.7</span>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-2 px-4 !rounded-button font-medium transition-colors whitespace-nowrap">
+Agregar al Carrito
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Delivery Information -->
+<section class="py-16 bg-gradient-to-r from-primary to-blue-600 text-white">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div>
+<h3 class="text-3xl font-bold mb-6">Entrega Rápida en la Zona Este</h3>
+<div class="space-y-4">
+<div class="flex items-center space-x-4">
+<div class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-20 rounded-full">
+<i class="ri-truck-line"></i>
+</div>
+<div>
+<h4 class="font-semibold">Entrega en 2-4 horas</h4>
+<p class="text-blue-100">En La Romana, San Pedro de Macorís y Bayahíbe</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-20 rounded-full">
+<i class="ri-shield-check-line"></i>
+</div>
+<div>
+<h4 class="font-semibold">Compra segura</h4>
+<p class="text-blue-100">Verificación de edad obligatoria</p>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-20 rounded-full">
+<i class="ri-phone-line"></i>
+</div>
+<div>
+<h4 class="font-semibold">Atención 24/7</h4>
+<p class="text-blue-100">WhatsApp: +1 (809) 555-0123</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
+<div class="w-full h-64 rounded-lg overflow-hidden" style="background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png'); background-size: cover; background-position: center;"></div>
+<p class="text-center mt-4 text-blue-100">Zonas de entrega disponibles</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Company Info -->
+<div>
+<div class="flex items-center mb-4">
+<div>
+<img style="width: 250px; height: 75px;" src="https://static.readdy.ai/image/ade69868ebee676ae37e60fd77ad09f6/ba77777004e75cfba38b471c023ed1e4.png" alt="DAGON">
+</div>
+<!-- <div>
+<h4 class="text-xl font-bold">DAGON</h4>
+<p class="text-sm text-gray-400">Almacén del Este</p>
+</div> -->
+</div>
+<p class="text-gray-400 mb-4">Tu almacén de confianza en la zona este de República Dominicana. Los mejores licores al mejor precio.</p>
+<div class="flex space-x-4">
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full hover:bg-blue-700 transition-colors cursor-pointer">
+<i class="ri-facebook-fill"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center bg-primary rounded-full hover:bg-blue-700 transition-colors cursor-pointer">
+<i class="ri-instagram-line"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center bg-green-600 rounded-full hover:bg-green-700 transition-colors cursor-pointer">
+<i class="ri-whatsapp-line"></i>
+</div>
+</div>
+</div>
+<!-- Quick Links -->
+<div>
+<h5 class="font-semibold mb-4">Enlaces Rápidos</h5>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Catálogo</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Ofertas</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Nuevos Productos</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Marcas</a></li>
+</ul>
+</div>
+<!-- Customer Service -->
+<div>
+<h5 class="font-semibold mb-4">Atención al Cliente</h5>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contacto</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Política de Entrega</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Términos y Condiciones</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition-colors">Política de Privacidad</a></li>
+</ul>
+</div>
+<!-- Contact Info -->
+<div>
+<h5 class="font-semibold mb-4">Contacto</h5>
+<div class="space-y-3">
+<div class="flex items-start space-x-3">
+<div class="w-5 h-5 flex items-center justify-center mt-1">
+<i class="ri-map-pin-line text-secondary"></i>
+</div>
+<p class="text-gray-400">Av. Libertad #45, La Romana, República Dominicana</p>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-phone-line text-secondary"></i>
+</div>
+<p class="text-gray-400">+1 (809) 555-0123</p>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-mail-line text-secondary"></i>
+</div>
+<p class="text-gray-400">info@dagonalmacen.com</p>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-12 pt-8">
+<div class="flex flex-col md:flex-row justify-between items-center">
+<p class="text-gray-400 text-sm">© 2024 DAGON Almacén del Este. Todos los derechos reservados.</p>
+<div class="flex items-center space-x-4 mt-4 md:mt-0">
+<p class="text-gray-400 text-sm">Métodos de pago:</p>
+<div class="flex space-x-2">
+<div class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded">
+<i class="ri-paypal-line text-blue-400"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded">
+<i class="ri-visa-line text-blue-600"></i>
+</div>
+<div class="w-8 h-8 flex items-center justify-center bg-gray-800 rounded">
+<i class="ri-mastercard-line text-red-500"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 text-center">
+<p class="text-xs text-gray-500">Prohibida la venta de bebidas alcohólicas a menores de edad. El consumo de alcohol puede ser perjudicial para la salud. Bebe con moderación.</p>
+</div>
+</div>
+</div>
+</footer>
+<!-- Cart Sidebar -->
+<div id="cartSidebar" class="fixed right-0 top-0 h-full w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+<div class="flex items-center justify-between p-6 border-b">
+<h3 class="text-lg font-semibold">Mi Carrito</h3>
+<button id="closeCart" class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full">
+<i class="ri-close-line"></i>
+</button>
+</div>
+<div id="cartItems" class="flex-1 overflow-y-auto p-6">
+<div class="text-center text-gray-500 py-12">
+<div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+<i class="ri-shopping-cart-line text-4xl"></i>
+</div>
+<p>Tu carrito está vacío</p>
+<p class="text-sm mt-2">Agrega productos para comenzar</p>
+</div>
+</div>
+<div class="border-t p-6">
+<div class="flex items-center justify-between mb-4">
+<span class="font-semibold">Total:</span>
+<span id="cartTotal" class="text-xl font-bold text-primary">RD$ 0</span>
+</div>
+<button class="w-full bg-primary hover:bg-blue-700 text-white py-3 px-6 !rounded-button font-semibold transition-colors whitespace-nowrap">
+Proceder al Checkout
+</button>
+</div>
+</div>
+<!-- Cart Overlay -->
+<div id="cartOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+<script id="ageVerification">
+document.addEventListener('DOMContentLoaded', function() {
+const ageModal = document.getElementById('ageModal');
+const ageYes = document.getElementById('ageYes');
+const ageNo = document.getElementById('ageNo');
+ageYes.addEventListener('click', function() {
+ageModal.style.display = 'none';
+localStorage.setItem('ageVerified', 'true');
+});
+ageNo.addEventListener('click', function() {
+window.location.href = 'https://www.google.com';
+});
+if (localStorage.getItem('ageVerified') === 'true') {
+ageModal.style.display = 'none';
+}
+});
+</script>
+<script id="cartFunctionality">
+document.addEventListener('DOMContentLoaded', function() {
+const cartButton = document.getElementById('cartButton');
+const cartSidebar = document.getElementById('cartSidebar');
+const cartOverlay = document.getElementById('cartOverlay');
+const closeCart = document.getElementById('closeCart');
+const cartBadge = document.getElementById('cartBadge');
+let cartItems = [];
+let cartCount = 0;
+function updateCartBadge() {
+cartBadge.textContent = cartCount;
+cartBadge.style.display = cartCount > 0 ? 'flex' : 'none';
+}
+function openCart() {
+cartSidebar.classList.remove('translate-x-full');
+cartOverlay.classList.remove('hidden');
+document.body.style.overflow = 'hidden';
+}
+function closeCartSidebar() {
+cartSidebar.classList.add('translate-x-full');
+cartOverlay.classList.add('hidden');
+document.body.style.overflow = '';
+}
+cartButton.addEventListener('click', openCart);
+closeCart.addEventListener('click', closeCartSidebar);
+cartOverlay.addEventListener('click', closeCartSidebar);
+document.querySelectorAll('button').forEach(button => {
+if (button.textContent.includes('Agregar al Carrito')) {
+button.addEventListener('click', function() {
+cartCount++;
+updateCartBadge();
+button.textContent = 'Agregado ✓';
+button.classList.add('bg-green-600');
+button.classList.remove('bg-primary');
+setTimeout(() => {
+button.textContent = 'Agregar al Carrito';
+button.classList.remove('bg-green-600');
+button.classList.add('bg-primary');
+}, 1500);
+});
+}
+});
+updateCartBadge();
+});
+</script>
+<script id="languageSelector">
+document.addEventListener('DOMContentLoaded', function() {
+const langButton = document.getElementById('langButton');
+let currentLang = 'ES';
+langButton.addEventListener('click', function() {
+currentLang = currentLang === 'ES' ? 'EN' : 'ES';
+langButton.querySelector('span').textContent = currentLang;
+if (currentLang === 'EN') {
+document.querySelector('h2').textContent = 'The Best Liquors from Dominican Republic';
+document.querySelector('h2').nextElementSibling.textContent = 'Discover our premium selection of rums, whiskys, wines and beers. Fast delivery throughout the eastern zone.';
+} else {
+document.querySelector('h2').textContent = 'Los Mejores Licores de República Dominicana';
+document.querySelector('h2').nextElementSibling.textContent = 'Descubre nuestra selección premium de rones, whiskys, vinos y cervezas. Entrega rápida en toda la zona este.';
+}
+});
+});
+</script>
+<script>
+    !function (t, e) { var o, n, p, r; e.__SV || (window.posthog = e, e._i = [], e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && (t = t[o[0]], e = o[1]), t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } } (p = t.createElement("script")).type = "text/javascript", p.crossOrigin = "anonymous", p.async = !0, p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js", (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? u = e[a] = [] : a = "posthog", u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }, e.__SV = 1) }(document, window.posthog || []);
+    posthog.init('phc_t9tkQZJiyi2ps9zUYm8TDsL6qXo4YmZx0Ot5rBlAlEd', {
+        api_host: 'https://us.i.posthog.com',
+        autocapture: false,
+        capture_pageview: false,
+        capture_pageleave: false,
+        capture_performance: {
+            web_vitals: false,
+        },
+        rageclick: false,
+    })
+    window.shareKey = 'wLpwguBjSdgmTsyWAkCS-g';
+    window.host = 'readdy.ai';
+</script>
+</body>
+</html>
